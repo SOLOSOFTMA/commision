@@ -96,6 +96,8 @@ def tes():
 	for brand in brand_with_insentif:
 		level = frappe.db.sql("""select target,bonus from `tabTarget Matrix Item` order by target asc """,as_list=1)
 		for key in sales_total.keys():
+			if not brand in sales_total[key]:
+				continue
 			if (sales_total[key][brand]['total']*0.95)>=sales_total[key][brand]['target']:
 				if not key in sales_commision:
 					sales_commision[key]={}
@@ -111,6 +113,8 @@ def tes():
 	for brand in brand_with_insentif:
 		level = frappe.db.sql("""select achieve,commision from `tabOBP Matrix Item` order by achieve asc """,as_list=1)
 		for key in sales_total.keys():
+			if not brand in sales_total[key]:
+				continue
 			obp = ((sales_total[key][brand]['total']*0.95)/sales_total[key][brand]['target'])*100
 			if not key in sales_commision:
 				sales_commision[key]={}
