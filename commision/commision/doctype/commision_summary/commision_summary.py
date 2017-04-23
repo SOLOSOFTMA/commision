@@ -58,7 +58,7 @@ def tes():
 				if row['sales'] in kupon:
 					found=0
 					for gg in kupon[row['sales']]:
-						if gg['item']=data['item']:
+						if gg['item']==data['item']:
 							found=1
 							gg['total_qty']+=flt(row['jumlah'])
 					if found==0:
