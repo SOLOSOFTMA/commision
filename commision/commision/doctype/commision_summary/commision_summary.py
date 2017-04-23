@@ -86,9 +86,9 @@ def tes():
 	sales_target = frappe.db.sql("""select sales,target,brand from `tabSales Target`""",as_dict=1)
 	for da in sales_target:
 		if not da['sales'] in sales_total:
-			sales_total[row['sales']]={}
+			sales_total[da['sales']]={}
 		if not da['brand'] in sales_total[da['sales']]:
-			sales_total[row['sales']][row['brand']]={}
+			sales_total[da['sales']][da['brand']]={}
 		sales_total[da['sales']][da['brand']]['target']=flt(da.target)
 		
 	#get insentf per sales
