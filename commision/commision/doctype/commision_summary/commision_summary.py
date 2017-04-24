@@ -96,15 +96,15 @@ def tes():
 	for brand in brand_with_insentif:
 		level = frappe.db.sql("""select target,bonus from `tabTarget Matrix Item` order by target asc """,as_list=1)
 		for key in sales_total.keys():
-			if not brand in sales_total[key]:
+			if not brand[0] in sales_total[key]:
 				continue
-			if (sales_total[key][brand]['total']*0.95)>=sales_total[key][brand]['target']:
+			if (sales_total[key][brand[0]]['total']*0.95)>=sales_total[key][brand[0]]['target']:
 				if not key in sales_commision:
 					sales_commision[key]={}
 					sales_commision[key]['sales']=key
 					sales_commision[key]['insentif']=0
 				for step in level:
-					if step[0]==sales_total[key][brand]['target']:
+					if step[0]==sales_total[key][brand[0]]['target']:
 						sales_commision[key]['insentif']+=step[1]
 						break
 
@@ -113,9 +113,9 @@ def tes():
 	for brand in brand_with_insentif:
 		level = frappe.db.sql("""select achieve,commision from `tabOBP Matrix Item` order by achieve asc """,as_list=1)
 		for key in sales_total.keys():
-			if not brand in sales_total[key]:
+			if not brand[0] in sales_total[key]:
 				continue
-			obp = ((sales_total[key][brand]['total']*0.95)/sales_total[key][brand]['target'])*100
+			obp = ((sales_total[key][brand[0]]['total']*0.95)/sales_total[key][brand[0]]['target'])*100
 			if not key in sales_commision:
 				sales_commision[key]={}
 				sales_commision[key]['sales']=key
@@ -124,11 +124,11 @@ def tes():
 			for step in level:
 				if step[0]<obp:
 					multi=step[1]
-			sales_commision[key]['obp']+=multi*(sales_total[key][brand]['total']*0.95)
+			sales_commision[key]['obp']+=multi*(sales_total[key][brand[0]]['total']*0.95)
 			if obp>=100:
-				sales_commision[key]['supervisor_insentif']+=0.13*(sales_total[key][brand]['total_penjualan']*0.95)
+				sales_commision[key]['supervisor_insentif']+=0.13*(sales_total[key][brand[0]]['total_penjualan']*0.95)
 			else:
-				sales_commision[key]['supervisor_insentif']+=0.1*(sales_total[key][brand]['total_penjualan']*0.95)
+				sales_commision[key]['supervisor_insentif']+=0.1*(sales_total[key][brand[0]]['total_penjualan']*0.95)
 
 	
 	#calculate kupon
