@@ -88,7 +88,7 @@ def tes():
 		if not da['sales'] in sales_total:
 			sales_total[da['sales']]={}
 		if not da['brand'] in sales_total[da['sales']]:
-			sales_total[da['sales']][da['brand']]={}
+			sales_total[da['sales']][da['brand']]={'qty':0,'total':0,'total_penjualan':0}
 		sales_total[da['sales']][da['brand']]['target']=flt(da.target)
 		
 	#get insentf per sales
