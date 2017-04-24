@@ -70,7 +70,7 @@ def tes():
 		if not row['sales'] in sales_total:
 			sales_total[row['sales']]={}
 		if not row['brand'] in sales_total[row['sales']]:
-			sales_total[row['sales']][row['brand']]={}
+			sales_total[row['sales']][row['brand']]={'qty':0,'total':0,'total_penjualan':0}
 		if cupon_applied ==0:
 			if row['days'] <= jual_hangus:
 				sales_total[row['sales']][row['brand']]['qty']+=flt(row['jumlah'])
@@ -103,6 +103,9 @@ def tes():
 					sales_commision[key]={}
 					sales_commision[key]['sales']=key
 					sales_commision[key]['insentif']=0
+					sales_commision[key]['obp']=0
+					sales_commision[key]['supervisor_insentif']=0
+					sales_commision[key]['kupon']=0
 				for step in level:
 					if step[0]==sales_total[key][brand[0]]['target']:
 						sales_commision[key]['insentif']+=step[1]
@@ -120,6 +123,9 @@ def tes():
 				sales_commision[key]={}
 				sales_commision[key]['sales']=key
 				sales_commision[key]['obp']=0
+				sales_commision[key]['supervisor_insentif']=0
+				sales_commision[key]['kupon']=0
+				sales_commision[key]['insentif']=0
 			multi=0
 			for step in level:
 				if step[0]<obp:
