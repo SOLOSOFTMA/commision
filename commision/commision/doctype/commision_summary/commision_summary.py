@@ -10,8 +10,7 @@ import math
 
 class CommisionSummary(Document):
 	pass
-#def generate(self):
-def tes():
+def generate(self):
 	#get all setting vriable
 	special_brand = frappe.db.get_single_value('Commision Setting','brand')
 	bonus_jual = flt(frappe.db.get_single_value('Commision Setting','bonus_jual'))
@@ -30,9 +29,8 @@ def tes():
 		left join `tabPayment Entry` pe on per.parent=pe.name
 		join `tabSales Invoice`  si on si.name = sit.parent
 		where si.docstatus=1 and si.outstanding_amount=0 and si.brand is not null and si.sales is not null and commision_redeemed =0
-
-	 """,as_dict=1)
-	#and si.posting_date < "{}" .format(self.to_date)
+		and si.posting_date < "{}"
+	 """.format(self.to_date),as_dict=1)
 	sales_total={}
 	kupon={}
 	payment={}
@@ -78,18 +76,31 @@ def tes():
 			if special_brand==row['brand'] and row['days']<=spesial_hangus:
 				if not key in sales_commision:
 					sales_commision[key]={}
+					sales_commision[key]['sales']=key
+					sales_commision[key]['insentif']=0
+					sales_commision[key]['obp']=0
+					sales_commision[key]['supervisor_insentif']=0
+					sales_commision[key]['kupon']=0
 				sales_commision[key]['special_brand'] = sales_total[da['sales']][special_brand]['qty']*bonus_jual
 		
 		sales_total[row['sales']][row['brand']]['total_penjualan']+=flt(row['amount'])
 		
 	#get sales target
-	sales_target = frappe.db.sql("""select sales,target,brand from `tabSales Target`""",as_dict=1)
+	sales_target = frappe.db.sql("""select st.sales,st.target,st.brand,s.supervisor from `tabSales Target` st join tabSales s on st.sales=s.name""",as_dict=1)
 	for da in sales_target:
 		if not da['sales'] in sales_total:
 			sales_total[da['sales']]={}
 		if not da['brand'] in sales_total[da['sales']]:
 			sales_total[da['sales']][da['brand']]={'qty':0,'total':0,'total_penjualan':0}
 		sales_total[da['sales']][da['brand']]['target']=flt(da.target)
+		if not key in sales_commision:
+			sales_commision[key]={}
+			sales_commision[key]['sales']=key
+			sales_commision[key]['insentif']=0
+			sales_commision[key]['obp']=0
+			sales_commision[key]['supervisor_insentif']=0
+			sales_commision[key]['kupon']=0
+		sales_commision[da['sales']]['supervisor']=da.supervisor
 		
 	#get insentf per sales
 	brand_with_insentif = frappe.db.sql("""select brand from `tabTarget Matrix`""",as_list=1)
@@ -142,7 +153,6 @@ def tes():
 		sales_commision[key]['kupon']+=math.floor(kupon['total_qty']/kupon['qty_rules'])*kupon['bonus_rules']
 	#get komisi tagih per sales
 
-	return sales_commision;
 	#get payment data
 	#payment_data = frappe.db.sql("""select pr.sales,(pr.allocated_amount-pr.discount_accumulated) as "payment",DATEDIFF(pe.posting_date,si.posting_date)
 	#	from `tabPayment Entry Reference` pr 
@@ -150,3 +160,17 @@ def tes():
 	#	left join `tabSales Invoice` si on pr.reference_name = si.name
 	#	where pr.reference_doctype="Sales Invoice" and pe.docstatus=1 and si.outstanding_amount=0 and si.brand is not null and si.sales is not null and commision_redeemed =0 and si.posting_date < "{}"
 	#""",as_dict=1)
+
+	self.invoice_list=inv_list
+	for det in sales_commision:
+		det_item = self.append("sales",{})
+		det_item.sales =sales_commision['sales']
+		det_item.supervisor = sales_commision['supervisor']
+		det_item.jual =flt(sales_commision['obp'])
+		det_item.insentif_sales = flt(sales_commision['insentif'])
+		det_item.tagih=0
+		det_item.kupon = flt(sales_commision['kupon'])
+		det_item.kursi_susun = flt(sales_commision['special_brand'])
+		det_item.total_sales = flt(sales_commision['obp'])+flt(sales_commision['insentif'])+flt(sales_commision['special_brand'])+flt(sales_commision['kupon'])
+		det_item.total_supervisor = flt(sales_commision['supervisor_insentif'])
+		
