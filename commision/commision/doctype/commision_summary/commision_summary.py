@@ -25,7 +25,7 @@ class CommisionSummary(Document):
 		sales = frappe.db.sql("""select name,supervisor from tabSales """,as_dict=1)
 		
 		#list of invoice for sales commision OBP , insentif
-		invoice = frappe.db.sql("""select si.name,si.posting_date,sit.item_code,si.brand , si.sales , sit.qty as "jumlah", sit.amount as "omset" , DATEDIFF(pe.posting_date,si.posting_date) as "days" , si.commision_type
+		invoice = frappe.db.sql("""select si.name,si.posting_date,sit.item_code,si.brand , si.sales , sit.qty as "jumlah", sit.amount  , DATEDIFF(pe.posting_date,si.posting_date) as "days" , si.commision_type
 			from `tabSales Invoice Item` sit
 			left join `tabPayment Entry Reference` per on per.reference_name = sit.parent
 			left join `tabPayment Entry` pe on per.parent=pe.name
