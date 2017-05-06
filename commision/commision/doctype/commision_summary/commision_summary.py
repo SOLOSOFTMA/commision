@@ -89,15 +89,15 @@ class CommisionSummary(Document):
 			if not da['brand'] in sales_total[da['sales']]:
 				sales_total[da['sales']][da['brand']]={'qty':0,'total':0,'total_penjualan':0}
 			sales_total[da['sales']][da['brand']]['target']=flt(da.target)
-			if not key in sales_commision:
-				sales_commision[key]={}
-				sales_commision[key]['sales']=key
-				sales_commision[key]['insentif']=0
-				sales_commision[key]['obp']=0
-				sales_commision[key]['supervisor_insentif']=0
-				sales_commision[key]['kupon']=0
-				sales_commision[key]['kursi susun']=0
-				sales_commision[key]['tagih']=0
+			if not da['sales'] in sales_commision:
+				sales_commision[da['sales']]={}
+				sales_commision[da['sales']]['sales']=da['sales']
+				sales_commision[da['sales']]['insentif']=0
+				sales_commision[da['sales']]['obp']=0
+				sales_commision[da['sales']]['supervisor_insentif']=0
+				sales_commision[da['sales']]['kupon']=0
+				sales_commision[da['sales']]['kursi susun']=0
+				sales_commision[da['sales']]['tagih']=0
 			sales_commision[da['sales']]['supervisor']=da.supervisor
 			
 		#get insentf per sales
