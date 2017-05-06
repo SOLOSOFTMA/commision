@@ -165,7 +165,7 @@ class CommisionSummary(Document):
 				where pr.reference_doctype="Sales Invoice" and pe.docstatus=1 and pr.reference_name IN ({})
 			""".format(inv_list),as_dict=1)
 
-			komisi_tagih = frappe.db.sql("""select days,commision from `tabKomisi Tagih` order by days asc""")
+			komisi_tagih = frappe.db.sql("""select days,commision from `tabKomisi Tagih` order by days asc""",as_dict=1)
 
 			for p in payment_data:
 				if not p['sales'] in sales_commision:
