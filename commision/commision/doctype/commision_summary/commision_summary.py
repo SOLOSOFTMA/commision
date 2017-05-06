@@ -211,7 +211,7 @@ class CommisionSummary(Document):
 			sales_commision[row_kupon['sales']]['kupon']+=flt(row_kupon['bonus'])
 
 		self.invoice_list=inv_list
-		for det in sales_commision:
+		for key,det in sales_commision:
 			det_item = self.append("sales",{})
 			det_item.sales =det['sales']
 			det_item.supervisor = det['supervisor']
