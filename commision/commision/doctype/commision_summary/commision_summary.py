@@ -9,6 +9,10 @@ from frappe.utils import  date_diff,flt,cint
 import math
 
 class CommisionSummary(Document):
+	def on_submit(self):
+		update = frappe.db.sql("""update `tabSales Invoice` set commision_redeemed=1 where name IN ({}) """.format(self.invoice_list))
+	def on_cancel(self):
+		update = frappe.db.sql("""update `tabSales Invoice` set commision_redeemed=0 where name IN ({}) """.format(self.invoice_list))
 	def generate(self):
 		#get all setting vriable
 		special_brand = frappe.db.get_single_value('Commision Setting','brand')
