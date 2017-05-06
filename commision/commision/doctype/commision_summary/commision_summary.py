@@ -213,15 +213,15 @@ class CommisionSummary(Document):
 		self.invoice_list=inv_list
 		for det in sales_commision:
 			det_item = self.append("sales",{})
-			det_item.sales =sales_commision['sales']
-			det_item.supervisor = sales_commision['supervisor']
-			det_item.jual =flt(sales_commision['obp'])
-			det_item.insentif_sales = flt(sales_commision['insentif'])
-			det_item.tagih=0
-			det_item.kupon = flt(sales_commision['kupon'])
-			det_item.kursi_susun = flt(sales_commision['kursi susun'])
-			det_item.total_sales = flt(sales_commision['obp'])+flt(sales_commision['insentif'])+flt(sales_commision['kupon'])
-			det_item.total_supervisor = flt(sales_commision['supervisor_insentif'])
+			det_item.sales =det['sales']
+			det_item.supervisor = det['supervisor']
+			det_item.jual =flt(det['obp'])
+			det_item.insentif_sales = flt(det['insentif'])
+			det_item.tagih=flt(det['tagih'])
+			det_item.kupon = flt(det['kupon'])
+			det_item.kursi_susun = flt(det['kursi susun'])
+			det_item.total_sales = flt(det['obp'])+flt(det['insentif'])+flt(det['kupon'])+flt(det['tagih'])
+			det_item.total_supervisor = flt(det['supervisor_insentif'])
 			
 
 def invoice_on_submit(doc,method):
