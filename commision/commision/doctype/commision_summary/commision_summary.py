@@ -103,23 +103,28 @@ class CommisionSummary(Document):
 		#get insentf per sales
 		brand_with_insentif = frappe.db.sql("""select brand from `tabTarget Matrix`""",as_list=1)
 		for brand in brand_with_insentif:
-			level = frappe.db.sql("""select target,bonus from `tabTarget Matrix Item` order by target asc """,as_list=1)
+			level = frappe.db.sql("""select target,bonus,bonus90 from `tabTarget Matrix Item` order by target asc """,as_list=1)
 			for key in sales_total.keys():
 				if not brand[0] in sales_total[key]:
 					continue
+				if not key in sales_commision:
+					sales_commision[key]={}
+					sales_commision[key]['sales']=key
+					sales_commision[key]['insentif']=0
+					sales_commision[key]['obp']=0
+					sales_commision[key]['supervisor_insentif']=0
+					sales_commision[key]['kupon']=0
+					sales_commision[key]['kursi susun']=0
+					sales_commision[key]['tagih']=0
 				if (sales_total[key][brand[0]]['total']*0.95)>=sales_total[key][brand[0]]['target']:
-					if not key in sales_commision:
-						sales_commision[key]={}
-						sales_commision[key]['sales']=key
-						sales_commision[key]['insentif']=0
-						sales_commision[key]['obp']=0
-						sales_commision[key]['supervisor_insentif']=0
-						sales_commision[key]['kupon']=0
-						sales_commision[key]['kursi susun']=0
-						sales_commision[key]['tagih']=0
 					for step in level:
 						if step[0]==sales_total[key][brand[0]]['target']:
 							sales_commision[key]['insentif']+=step[1]
+							break
+				elif (sales_total[key][brand[0]]['total']*0.95)>=(sales_total[key][brand[0]]['target']*0.9):
+					for step in level:
+						if step[0]==sales_total[key][brand[0]]['target']:
+							sales_commision[key]['insentif']+=step[2]
 							break
 
 		#get sales OBP per sales
