@@ -155,7 +155,13 @@ class CommisionSummary(Document):
 					sales_commision[key]['supervisor_insentif']+=0.1*(sales_total[key][brand[0]]['total_penjualan']*0.95)
 
 		#get komisi tagih per sales
-
+		frappe.throw("""select pr.sales,(pr.allocated_amount-pr.discount_accumulated) as "payment",
+			DATEDIFF(pe.posting_date,si.posting_date) as 'days'
+			from `tabPayment Entry Reference` pr 
+			join `tabPayment Entry` pe on pr.parent=pe.name
+			left join `tabSales Invoice` si on pr.reference_name = si.name
+			where pr.reference_doctype="Sales Invoice" and pe.docstatus=1 and pr.reference_name IN ({})
+		""".format(inv_list))
 		#get payment data
 		payment_data = frappe.db.sql("""select pr.sales,(pr.allocated_amount-pr.discount_accumulated) as "payment",
 			DATEDIFF(pe.posting_date,si.posting_date) as 'days'
