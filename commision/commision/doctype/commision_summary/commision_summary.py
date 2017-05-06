@@ -180,7 +180,7 @@ class CommisionSummary(Document):
 				lc=0
 				for kt in komisi_tagih:
 					if kt['days']>p['days']:
-						sales_commision[p['sales']]['tagih']+=lc*p['payment']
+						sales_commision[p['sales']]['tagih']+= flt(kt['commision'])*p['payment']
 						lc=-1
 						break
 					lc = flt(kt['commision'])
@@ -211,6 +211,7 @@ class CommisionSummary(Document):
 			sales_commision[row_kupon['sales']]['kupon']+=flt(row_kupon['bonus'])
 
 		self.invoice_list=inv_list
+		self.sales=[]
 		for det in sales_commision:
 			det_item = self.append("sales",{})
 			det_item.sales =sales_commision[det]['sales']
