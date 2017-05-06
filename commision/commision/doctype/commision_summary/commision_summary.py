@@ -225,7 +225,7 @@ class CommisionSummary(Document):
 			
 
 def invoice_on_submit(doc,method):
-	if doc.commision_type=="Kupon"
+	if doc.commision_type=="Kupon":
 		coupon = frappe.db.sql("""select item,qty,bonus,valid_to,valid_from from `tabCoupon Bonus` where valid_from<="{}" and valid_to >="{}" """.format(doc.posting_date),as_dict=1)
 		for item in doc.items:
 			for x in coupon:
