@@ -116,6 +116,10 @@ class CommisionSummary(Document):
 					sales_commision[key]['kupon']=0
 					sales_commision[key]['kursi susun']=0
 					sales_commision[key]['tagih']=0
+				if not sales_total[key][brand[0]]:
+					continue
+				if not sales_total[key][brand[0]]['target']:
+					continue
 				if (sales_total[key][brand[0]]['total']*0.95)>=sales_total[key][brand[0]]['target']:
 					for step in level:
 						if step[0]==sales_total[key][brand[0]]['target']:
