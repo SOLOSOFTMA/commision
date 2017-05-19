@@ -136,7 +136,9 @@ class CommisionSummary(Document):
 		for brand in brand_with_obp:
 			level = frappe.db.sql("""select achieve,commision from `tabOBP Matrix Item` order by achieve asc """,as_list=1)
 			for key in sales_total.keys():
-				if not brand[0] in sales_total[key]:
+				if brand[0] not in sales_total[key]:
+					continue
+				if 'target' not in sales_total[key][brand[0]]:
 					continue
 				obp = ((sales_total[key][brand[0]]['total']*0.95)/sales_total[key][brand[0]]['target'])*100
 				if not key in sales_commision:
