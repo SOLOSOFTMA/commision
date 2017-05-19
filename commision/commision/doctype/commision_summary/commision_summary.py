@@ -219,7 +219,7 @@ class CommisionSummary(Document):
 		for det in sales_commision:
 			det_item = self.append("sales",{})
 			det_item.sales =sales_commision[det]['sales']
-			det_item.supervisor = sales_commision[det]['supervisor']
+			det_item.supervisor = sales_commision[det]['supervisor'] or ""
 			det_item.jual =flt(sales_commision[det]['obp'])
 			det_item.insentif_sales = flt(sales_commision[det]['insentif'])
 			det_item.tagih=flt(sales_commision[det]['tagih'])
