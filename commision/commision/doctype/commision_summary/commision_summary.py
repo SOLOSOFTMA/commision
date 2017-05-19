@@ -69,6 +69,7 @@ class CommisionSummary(Document):
 						sales_commision[key]['kupon']=0
 						sales_commision[key]['kursi susun']=0
 						sales_commision[key]['tagih']=0
+						sales_commision[key]['supervisor']=0
 					sales_commision[key]['kursi susun']+=flt(row['jumlah'])*bonus_jual
 					if not row['sales'] in ks:
 						ks[row['sales']]={}
@@ -98,6 +99,7 @@ class CommisionSummary(Document):
 				sales_commision[da['sales']]['kupon']=0
 				sales_commision[da['sales']]['kursi susun']=0
 				sales_commision[da['sales']]['tagih']=0
+				sales_commision[da['sales']]['supervisor']=0
 			sales_commision[da['sales']]['supervisor']=da.supervisor
 			
 		#get insentf per sales
@@ -116,6 +118,7 @@ class CommisionSummary(Document):
 					sales_commision[key]['kupon']=0
 					sales_commision[key]['kursi susun']=0
 					sales_commision[key]['tagih']=0
+					sales_commision[key]['supervisor']=0
 				if brand[0] not in sales_total[key]:
 					continue
 				if 'target' not in sales_total[key][brand[0]]:
@@ -149,6 +152,7 @@ class CommisionSummary(Document):
 					sales_commision[key]['kupon']=0
 					sales_commision[key]['kursi susun']=0
 					sales_commision[key]['insentif']=0
+					sales_commision[key]['supervisor']=0
 					sales_commision[key]['tagih']=0
 				multi=0
 				for step in level:
@@ -183,6 +187,7 @@ class CommisionSummary(Document):
 					sales_commision[p['sales']]['kursi susun']=0
 					sales_commision[p['sales']]['insentif']=0
 					sales_commision[p['sales']]['tagih']=0
+					sales_commision[p['sales']]['supervisor']=0
 				lc=0
 				for kt in komisi_tagih:
 					if kt['days']>p['days']:
@@ -214,6 +219,7 @@ class CommisionSummary(Document):
 				sales_commision[row_kupon['sales']]['kursi susun']=0
 				sales_commision[row_kupon['sales']]['insentif']=0
 				sales_commision[row_kupon['sales']]['tagih']=0
+				sales_commision[row_kupon['sales']]['supervisor']=""
 			sales_commision[row_kupon['sales']]['kupon']+=flt(row_kupon['bonus'])
 
 		self.invoice_list=inv_list
@@ -221,7 +227,7 @@ class CommisionSummary(Document):
 		for det in sales_commision:
 			det_item = self.append("sales",{})
 			det_item.sales =sales_commision[det]['sales']
-			det_item.supervisor = sales_commision[det]['supervisor'] or ""
+			det_item.supervisor = sales_commision[det]['supervisor']
 			det_item.jual =flt(sales_commision[det]['obp'])
 			det_item.insentif_sales = flt(sales_commision[det]['insentif'])
 			det_item.tagih=flt(sales_commision[det]['tagih'])
