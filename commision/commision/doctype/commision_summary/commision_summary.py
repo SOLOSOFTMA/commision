@@ -16,10 +16,10 @@ class CommisionSummary(Document):
 	def generate(self):
 		#get all setting vriable
 		special_brand = frappe.db.get_single_value('Commision Setting','brand')
-		bonus_jual = flt(frappe.db.get_single_value('Commision Setting','bonus_jual'))
-		bonus_tagih = flt(frappe.db.get_single_value('Commision Setting','bonus_tagih'))
-		spesial_hangus = flt(frappe.db.get_single_value('Commision Setting','spesial_hangus'))
-		jual_hangus = flt(frappe.db.get_single_value('Commision Setting','jual_hangus'))
+		bonus_jual = flt(frappe.db.get_single_value('Commision Setting','bonus_jual'),3)
+		bonus_tagih = flt(frappe.db.get_single_value('Commision Setting','bonus_tagih'),3)
+		spesial_hangus = flt(frappe.db.get_single_value('Commision Setting','spesial_hangus'),3)
+		jual_hangus = flt(frappe.db.get_single_value('Commision Setting','jual_hangus'),3)
 		#Selecting invoice due and save to an array
 		#list of sales
 		sales = frappe.db.sql("""select name,supervisor from tabSales """,as_dict=1)
@@ -58,8 +58,8 @@ class CommisionSummary(Document):
 
 			if row['brand']==special_brand and row['commision_type']=='Kursi susun':
 				if row['days']<=spesial_hangus:
-					sales_total[row['sales']][row['brand']]['qty']+=flt(row['jumlah'])
-					sales_total[row['sales']][row['brand']]['total']+=flt(row['amount'])
+					sales_total[row['sales']][row['brand']]['qty']+=flt(row['jumlah'],3)
+					sales_total[row['sales']][row['brand']]['total']+=flt(row['amount'],3)
 					if not row['sales'] in sales_commision:
 						sales_commision[key]={}
 						sales_commision[key]['sales']=row['sales']
@@ -70,17 +70,17 @@ class CommisionSummary(Document):
 						sales_commision[key]['kursi susun']=0
 						sales_commision[key]['tagih']=0
 						sales_commision[key]['supervisor']=0
-					sales_commision[key]['kursi susun']+=flt(row['jumlah'])*bonus_jual
+					sales_commision[key]['kursi susun']+=flt(row['jumlah'],3)*bonus_jual
 					if not row['sales'] in ks:
 						ks[row['sales']]={}
 						ks[row['sales']]['omset']=0
 						ks[row['sales']]['komisi']=0
-					ks[row['sales']]['komisi']+=flt(row['jumlah'])*bonus_jual
-					ks[row['sales']]['omset']=flt(row['amount'])
+					ks[row['sales']]['komisi']+=flt(row['jumlah'],3)*bonus_jual
+					ks[row['sales']]['omset']=flt(row['amount'],3)
 			elif row['days'] <= jual_hangus:
-				sales_total[row['sales']][row['brand']]['qty']+=flt(row['jumlah'])
-				sales_total[row['sales']][row['brand']]['total']+=flt(row['amount'])
-			sales_total[row['sales']][row['brand']]['total_penjualan']+=flt(row['amount'])
+				sales_total[row['sales']][row['brand']]['qty']+=flt(row['jumlah'],3)
+				sales_total[row['sales']][row['brand']]['total']+=flt(row['amount'],3)
+			sales_total[row['sales']][row['brand']]['total_penjualan']+=flt(row['amount'],3)
 			
 		#get sales target
 		sales_target = frappe.db.sql("""select st.sales,st.target,st.brand,s.supervisor from `tabSales Target` st join tabSales s on st.sales=s.name""",as_dict=1)
@@ -89,7 +89,7 @@ class CommisionSummary(Document):
 				sales_total[da['sales']]={}
 			if not da['brand'] in sales_total[da['sales']]:
 				sales_total[da['sales']][da['brand']]={'qty':0,'total':0,'total_penjualan':0}
-			sales_total[da['sales']][da['brand']]['target']=flt(da.target)
+			sales_total[da['sales']][da['brand']]['target']=flt(da.target,3)
 			if not da['sales'] in sales_commision:
 				sales_commision[da['sales']]={}
 				sales_commision[da['sales']]['sales']=da['sales']
@@ -191,13 +191,13 @@ class CommisionSummary(Document):
 				lc=0
 				for kt in komisi_tagih:
 					if kt['days']>p['days']:
-						sales_commision[p['sales']]['tagih']+= flt(kt['commision'])*p['payment']
+						sales_commision[p['sales']]['tagih']+= flt(kt['commision'])*flt(p['payment'],3)
 						lc=-1
 						break
-					lc = flt(kt['commision'])
+					lc = flt(kt['commision'],3)
 				#give the last tier of commision
 				if lc >-1:
-					sales_commision[p['sales']]['tagih']+=lc*p['payment']
+					sales_commision[p['sales']]['tagih']+=lc*flt(p['payment'],3)
 		#calculate kupon
 		#should make a query for kupon	
 		invoice_kupon = frappe.db.sql("""select sit.kupon_bonus as 'bonus' , si.sales,si.name
