@@ -191,13 +191,13 @@ class CommisionSummary(Document):
 				lc=0
 				for kt in komisi_tagih:
 					if kt['days']>p['days']:
-						sales_commision[p['sales']]['tagih']+= flt(kt['commision'])*flt(p['payment'],3)
+						sales_commision[p['sales']]['tagih']+= flt(kt['commision'])*flt(p['payment'],3)/100
 						lc=-1
 						break
 					lc = flt(kt['commision'],3)
 				#give the last tier of commision
 				if lc >-1:
-					sales_commision[p['sales']]['tagih']+=lc*flt(p['payment'],3)
+					sales_commision[p['sales']]['tagih']+=lc*flt(p['payment'],3)/100
 		#calculate kupon
 		#should make a query for kupon	
 		invoice_kupon = frappe.db.sql("""select sit.kupon_bonus as 'bonus' , si.sales,si.name
