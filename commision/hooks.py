@@ -10,7 +10,7 @@ app_icon = "octicon octicon-law"
 app_color = "grey"
 app_email = "bobzz.zone@gmail.com"
 app_license = "MIT"
-
+boot_session = "commision.boot.boot_session"
 # Includes in <head>
 # ------------------
 
