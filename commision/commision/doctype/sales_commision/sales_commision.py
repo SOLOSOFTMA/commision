@@ -194,21 +194,22 @@ class SalesCommision(Document):
 			else:
 				result_temp[inv['brand']]+=flt(inv['grand_total'])
 		for r in result_temp:
-			if target_map[r]*0.9<=res.netto:
-				incentive = frappe.db.sql("""select target,bonus,bonus90 from `tabTarget Matrix Item` where parent="{}" order by target asc """.format(r),as_list=1)
-				for step in incentive:
-					if step[0]<=target_map[r]:
-						ins = self.append("insentif",{})
-						ins.brand=r
-						ins.target=target_map[r]
-						ins.omset=res.omset
-						if target_map[r]<=res.netto:
-							ins.komisi = flt(step[1])
-						else:
-							ins.komisi = flt(step[2])
-						ins.bonus=step[1]
-						ins.bonus90=step[2]
-						total_insentif+=ins.komisi
+			if r in target_map:
+				if target_map[r]*0.9<=res.netto:
+					incentive = frappe.db.sql("""select target,bonus,bonus90 from `tabTarget Matrix Item` where parent="{}" order by target asc """.format(r),as_list=1)
+					for step in incentive:
+						if step[0]<=target_map[r]:
+							ins = self.append("insentif",{})
+							ins.brand=r
+							ins.target=target_map[r]
+							ins.omset=res.omset
+							if target_map[r]<=res.netto:
+								ins.komisi = flt(step[1])
+							else:
+								ins.komisi = flt(step[2])
+							ins.bonus=step[1]
+							ins.bonus90=step[2]
+							total_insentif+=ins.komisi
 		self.total_insentif=total_insentif
 		self.grand_total=self.total_komisi_tagih+self.total_insentif+self.total_kupon+self.total_special_brand+self.total_obp
 		self.insentif_redeemed=inv_list
