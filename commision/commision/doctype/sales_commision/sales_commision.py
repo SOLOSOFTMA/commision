@@ -176,7 +176,7 @@ class SalesCommision(Document):
 		target_map={}
 		for t in self.targets:
 			target_map[t.brand]=t.target
-		invoice = frappe.db.sql("""select si.name,si.posting_date,si.brand , si.sales , sit.qty as "jumlah", si.grand_total , si.commision_type
+		invoice = frappe.db.sql("""select si.name,si.posting_date,si.brand , si.sales , si.grand_total , si.commision_type
 			from `tabSales Invoice`  si 
 			where si.docstatus=1 and si.brand is not null and si.insentif_redeemed =0 and si.commision_type in ("OBP")
 			and si.posting_date < "{}" and si.sales="{}"
