@@ -169,7 +169,8 @@ class SalesCommision(Document):
 		self.kursi_susun_tertagih=pe_list
 		self.total_special_brand=komisi_bayar+komisi_jual
 		self.grand_total=self.total_komisi_tagih+self.total_insentif+self.total_kupon+self.total_special_brand+self.total_obp
-		temp=frappe.db.sql("""update `tabPayment Entry Reference` set commision_redeemed=1 where name IN ({}) """.format(pe_not_valid),as_list=1)
+		#if pe_not_valid!="":
+			#temp=frappe.db.sql("""update `tabPayment Entry Reference` set commision_redeemed=1 where name IN ({}) """.format(pe_not_valid),as_list=1)
 	
 	def get_insentif(self):
 		total_insentif=0
