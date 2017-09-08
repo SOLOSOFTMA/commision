@@ -194,17 +194,20 @@ class SalesCommision(Document):
 				result_temp[inv['brand']]=flt(inv['grand_total'])
 			else:
 				result_temp[inv['brand']]+=flt(inv['grand_total'])
+		res={}
+		for row in self.obp_result:
+			res[row.brand]=row
 		for r in result_temp:
 			if r in target_map:
-				if target_map[r]*0.9<=res.netto:
+				if target_map[r]*0.9<=res[r].netto:
 					incentive = frappe.db.sql("""select target,bonus,bonus90 from `tabTarget Matrix Item` where parent="{}" order by target asc """.format(r),as_list=1)
 					for step in incentive:
 						if step[0]<=target_map[r]:
 							ins = self.append("insentif",{})
 							ins.brand=r
 							ins.target=target_map[r]
-							ins.omset=res.omset
-							if target_map[r]<=res.netto:
+							ins.omset=res[r].omset
+							if target_map[r]<=res[r].netto:
 								ins.komisi = flt(step[1])
 							else:
 								ins.komisi = flt(step[2])
