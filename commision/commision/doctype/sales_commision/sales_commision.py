@@ -190,9 +190,9 @@ class SalesCommision(Document):
 			elif not row.name in inv_list:
 				inv_list=""" {},"{}" """.format(inv_list,row.name)
 			if not omset.brand in result_temp:
-				result_temp[inv['brand']]=flt(inv['grandtotal'])
+				result_temp[inv['brand']]=flt(inv['grand_total'])
 			else:
-				result_temp[inv['brand']]+=flt(inv['grandtotal'])
+				result_temp[inv['brand']]+=flt(inv['grand_total'])
 		for r in result_temp:
 			if target_map[r]*0.9<=res.netto:
 				incentive = frappe.db.sql("""select target,bonus,bonus90 from `tabTarget Matrix Item` where parent="{}" order by target asc """.format(r),as_list=1)
@@ -231,7 +231,7 @@ class SalesCommision(Document):
 			omset.inv_no=inv['name']
 			omset.brand=inv['brand']
 			omset.customer = inv['customer']
-			omset.amount = flt(inv['grandtotal'])
+			omset.amount = flt(inv['grand_total'])
 			omset.age=flt(inv['days'])
 			if omset.age <=jual_hangus:
 				if not omset.brand in result_temp:
