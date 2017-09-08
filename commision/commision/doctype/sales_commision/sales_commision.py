@@ -176,7 +176,7 @@ class SalesCommision(Document):
 		target_map={}
 		for t in self.targets:
 			target_map[t.brand]=t.target
-		invoice = frappe.db.sql("""select si.name,si.posting_date,si.brand , si.sales , sit.qty as "jumlah", si.grandtotal , si.commision_type
+		invoice = frappe.db.sql("""select si.name,si.posting_date,si.brand , si.sales , sit.qty as "jumlah", si.grand_total , si.commision_type
 			from `tabSales Invoice`  si 
 			where si.docstatus=1 and si.brand is not null and si.insentif_redeemed =0 and si.commision_type in ("OBP")
 			and si.posting_date < "{}" and si.sales="{}"
@@ -215,7 +215,7 @@ class SalesCommision(Document):
 	def generate_obp(self):
 		jual_hangus = flt(frappe.db.get_single_value('Commision Setting','jual_hangus'),3)
 
-		invoice = frappe.db.sql("""select si.name,si.customer,si.posting_date,si.brand , si.sales , sit.qty as "jumlah", si.grandtotal  , DATEDIFF(pe.posting_date,si.posting_date) as "days" , si.commision_type
+		invoice = frappe.db.sql("""select si.name,si.customer,si.posting_date,si.brand , si.sales , sit.qty as "jumlah", si.grand_total  , DATEDIFF(pe.posting_date,si.posting_date) as "days" , si.commision_type
 			from `tabSales Invoice Item` sit
 			left join `tabPayment Entry Reference` per on per.reference_name = sit.parent
 			left join `tabPayment Entry` pe on per.parent=pe.name
