@@ -189,7 +189,7 @@ class SalesCommision(Document):
 				inv_list=""" "{}" """.format(inv.name)
 			elif not inv.name in inv_list:
 				inv_list=""" {},"{}" """.format(inv_list,inv.name)
-			if not omset.brand in result_temp:
+			if not inv.brand in result_temp:
 				result_temp[inv['brand']]=flt(inv['grand_total'])
 			else:
 				result_temp[inv['brand']]+=flt(inv['grand_total'])
