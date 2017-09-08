@@ -257,7 +257,7 @@ class SalesCommision(Document):
 			total_omset_obp+=res.omset
 
 		self.total_obp=total_obp
-		self.total_insentif=total_insentif
+		#self.total_insentif=total_insentif
 		self.total_omset_obp=total_omset_obp
 		self.grand_total=self.total_komisi_tagih+self.total_insentif+self.total_kupon+self.total_special_brand+self.total_obp
 
